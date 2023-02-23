@@ -8,13 +8,13 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 platform :ios, podfile_properties['ios.deploymentTarget'] || '13.0'
 install! 'cocoapods',
   :deterministic_uuids => false
+  
 
 target 'virtualewines' do
   use_expo_modules!
   config = use_native_modules!
 
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
-
   # Flags change depending on the env values.
   flags = get_default_flags()
 
@@ -27,7 +27,7 @@ target 'virtualewines' do
     #
     # Uncomment to opt-in to using Flipper
     # Note that if you have use_frameworks! enabled, Flipper will not work
-    # :flipper_configuration => !ENV['CI'] ? FlipperConfiguration.enabled : FlipperConfiguration.disabled,
+    :flipper_configuration => !ENV['CI'] ? FlipperConfiguration.enabled(["Debug"],{ 'Flipper' => '0.182.0' }) : FlipperConfiguration.disabled,
   )
 
   post_install do |installer|

@@ -18,14 +18,14 @@ import { IStorage } from './IStorage'
 
 const storage: IStorage = {
   get: async <T>(key: STORAGE_KEY): Promise<T | null> => {
-    const data = await AsyncStorage.getItem(STORAGE_KEY[key])
+    const data = await AsyncStorage.getItem(key)
 
     return data ? JSON.parse(data) : null
   },
 
   set: async <T>(key: STORAGE_KEY, value: T): Promise<void> => {
     const data = JSON.stringify(value)
-    await AsyncStorage.setItem(STORAGE_KEY[key], data)
+    await AsyncStorage.setItem(key, data)
   }
 }
 

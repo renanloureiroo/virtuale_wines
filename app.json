@@ -1,10 +1,9 @@
 {
   "expo": {
     "name": "virtuale_wines",
+    "scheme": "wines",
     "slug": "virtuale_wines",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"]
   }
 }

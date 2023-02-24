@@ -1,19 +1,23 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { SignIn } from '../features/Authentication/Screens/SignIn'
+
 import { defaultOptions } from '../shared/config/navigation/header'
 
 import { useAppStackNavigationScreen } from './AppStackNavigation.hook'
+import { AuthenticationStack } from '../features/Authentication/navigation/AuthenticationStack'
+import { Home } from '../features/Home/screens/Home'
+import { Text } from 'react-native'
 
-type AppStackParamList = {
-  signIn: undefined
+export type AppStackParamList = {
+  authentication: undefined
+  app: undefined
 }
 
 const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>()
 
 export const AppStackNavigation = () => {
-  const { hydrated, initialState, navigationRef } =
+  const { hydrated, initialState, navigationRef, onChangeState, linking } =
     useAppStackNavigationScreen()
 
   if (!hydrated) {
@@ -23,11 +27,19 @@ export const AppStackNavigation = () => {
   return (
     <NavigationContainer
       ref={navigationRef}
-      initialState={initialState}>
+      initialState={initialState}
+      onStateChange={onChangeState}
+      linking={linking}
+      fallback={<Text>Loading...</Text>}>
       <Navigator screenOptions={defaultOptions}>
         <Screen
-          component={SignIn}
-          name={'signIn'}
+          component={AuthenticationStack}
+          name={'authentication'}
+        />
+
+        <Screen
+          component={Home}
+          name={'app'}
         />
       </Navigator>
     </NavigationContainer>

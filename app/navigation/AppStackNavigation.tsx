@@ -1,12 +1,10 @@
 import React from 'react'
-import {
-  NavigationContainer,
-  useNavigationContainerRef
-} from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { SignIn } from '../features/Authentication/Screens/SignIn'
-import { useFlipper } from '@react-navigation/devtools'
 import { defaultOptions } from '../shared/config/navigation/header'
+
+import { useAppStackNavigationScreen } from './AppStackNavigation.hook'
 
 type AppStackParamList = {
   signIn: undefined
@@ -15,12 +13,17 @@ type AppStackParamList = {
 const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>()
 
 export const AppStackNavigation = () => {
-  const navigationRef = useNavigationContainerRef()
+  const { hydrated, initialState, navigationRef } =
+    useAppStackNavigationScreen()
 
-  useFlipper(navigationRef)
+  if (!hydrated) {
+    return null
+  }
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      initialState={initialState}>
       <Navigator screenOptions={defaultOptions}>
         <Screen
           component={SignIn}

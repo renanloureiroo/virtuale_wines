@@ -1,5 +1,5 @@
 import { AuthenticationStackParamList } from './../features/Authentication/navigation/AuthenticationStack'
-import { useFlipper } from '@react-navigation/devtools'
+
 import {
   LinkingOptions,
   NavigationContainerRefWithCurrent,
@@ -49,8 +49,6 @@ export const useAppStackNavigationScreen =
     }
 
     const navigationRef = useNavigationContainerRef<AppStackParamList>()
-
-    useFlipper(navigationRef)
 
     const onChangeState = async (state: any): Promise<void> =>
       await storage.set(STORAGE_KEY.NAVIGATION, state)

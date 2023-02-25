@@ -28,7 +28,10 @@ export const AppStackNavigation: FC = () => {
     <NavigationContainer
       ref={navigationRef}
       initialState={initialState}
-      onStateChange={onChangeState}
+      onStateChange={(state): void => {
+        console.log(state)
+        onChangeState(state)
+      }}
       linking={linking}
       fallback={<Text>Loading...</Text>}>
       <Navigator screenOptions={defaultOptions}>

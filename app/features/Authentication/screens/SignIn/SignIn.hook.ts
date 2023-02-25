@@ -7,10 +7,14 @@ type SignInType = NativeStackNavigationProp<
   'signin'
 >
 
-export const useSignInScreen = () => {
+interface IUseSignInScreen {
+  handleNavigateForSignUp: () => void
+}
+
+export const useSignInScreen = (): IUseSignInScreen => {
   const { push } = useNavigation<SignInType>()
 
-  const handleNavigateForSignUp = () => {
+  const handleNavigateForSignUp = (): void => {
     push('signup')
   }
 

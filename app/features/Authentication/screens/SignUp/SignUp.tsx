@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC, ReactElement } from 'react'
 import { Button, Text, View } from 'react-native'
 import { useSignUpScreen } from './SignUp.hook'
 
-export const SignUp = () => {
+export const SignUp: FC<ReactElement> = () => {
   const { handleNavigateForAppHome, id } = useSignUpScreen()
   return (
     <View className="flex-1 items-center justify-center">

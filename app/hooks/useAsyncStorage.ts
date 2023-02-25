@@ -1,19 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import { STORAGE_KEY } from './../shared/constants/storage'
+import { storage } from '../shared/utils/storage/storage'
 
-export const useLocalStorage = <T = any>(key: string, initialValue = '') => {
-  const [state, setState] = useState<T>(() => {
-    const storedData = localStorage.getItem(key)
+type useLocalStorageType<T> = [state: T, setState: Dispatch<SetStateAction<T>>]
 
-    if (storedData) {
-      // Se houver algo salvo, retorna
-      return JSON.parse(storedData)
-    }
-
-    return initialValue
-  })
+export const useLocalStorage = <T = false>(
+  key: STORAGE_KEY,
+  initialValue?: T
+): useLocalStorageType<T> => {
+  const [state, setState] = useState<T>(initialValue)
 
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state))
+    const getValue = async (): Promise<void> => {
+      const storedData = await storage.get(key)
+
+      if (storedData) {
+        // Se houver algo salvo, retorna
+        return setState(JSON.parse(storedData))
+      }
+    }
+
+    getValue()
+  }, [])
+
+  useEffect(() => {
+    storage.set(key, JSON.stringify(state))
   }, [key, state])
 
   return [state, setState]

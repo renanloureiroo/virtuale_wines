@@ -2,6 +2,7 @@ import { AuthenticationStackParamList } from './../features/Authentication/navig
 import { useFlipper } from '@react-navigation/devtools'
 import {
   LinkingOptions,
+  NavigationContainerRefWithCurrent,
   NavigatorScreenParams,
   useNavigationContainerRef
 } from '@react-navigation/native'
@@ -17,66 +18,75 @@ type AppStackParamList = {
   app: undefined
 }
 
-export const useAppStackNavigationScreen = () => {
-  const [hydrated, setHydrated] = useState<boolean>(false)
-  const [initialState, setInitialState] = useState()
-
-  const prefix = Linking.createURL('/')
-  const linking: LinkingOptions<AppStackParamList> = {
-    prefixes: [prefix],
-    config: {
-      screens: {
-        authentication: {
-          initialRouteName: 'signin',
-          screens: {
-            signin: 'login',
-            signup: 'signup/:id?'
-          }
-        },
-        app: 'home'
-      }
-    }
-  }
-
-  const navigationRef = useNavigationContainerRef<AppStackParamList>()
-
-  useFlipper(navigationRef)
-
-  const onChangeState = async (state) =>
-    await storage.set(STORAGE_KEY.NAVIGATION, state)
-
-  useEffect(() => {
-    const restoreState = async () => {
-      try {
-        const initialUrl = await RNLinking.getInitialURL()
-        console.log(initialUrl)
-
-        if (Platform.OS !== 'web' && initialUrl === null) {
-          const savedStateString = await storage.get(STORAGE_KEY.NAVIGATION)
-
-          const state = savedStateString ?? undefined
-
-          if (state !== undefined) {
-            setInitialState(state)
-          }
-        }
-      } catch (e) {
-        console.log(e)
-      } finally {
-        setHydrated(true)
-      }
-    }
-
-    if (!hydrated) {
-      restoreState()
-    }
-  }, [hydrated])
-
-  return {
-    hydrated,
-    initialState,
-    navigationRef,
-    onChangeState,
-    linking
-  }
+type useAppStackNavigationScreenType = {
+  hydrated: boolean
+  initialState: any
+  navigationRef: NavigationContainerRefWithCurrent<AppStackParamList>
+  onChangeState: (state: any) => void
+  linking: LinkingOptions<AppStackParamList>
 }
+
+export const useAppStackNavigationScreen =
+  (): useAppStackNavigationScreenType => {
+    const [hydrated, setHydrated] = useState<boolean>(false)
+    const [initialState, setInitialState] = useState()
+
+    const prefix = Linking.createURL('/')
+    const linking: LinkingOptions<AppStackParamList> = {
+      prefixes: [prefix],
+      config: {
+        screens: {
+          authentication: {
+            initialRouteName: 'signin',
+            screens: {
+              signin: 'login',
+              signup: 'signup/:id?'
+            }
+          },
+          app: 'home'
+        }
+      }
+    }
+
+    const navigationRef = useNavigationContainerRef<AppStackParamList>()
+
+    useFlipper(navigationRef)
+
+    const onChangeState = async (state: any): Promise<void> =>
+      await storage.set(STORAGE_KEY.NAVIGATION, state)
+
+    useEffect(() => {
+      const restoreState = async (): Promise<void> => {
+        try {
+          const initialUrl = await RNLinking.getInitialURL()
+          console.log(initialUrl)
+
+          if (Platform.OS !== 'web' && initialUrl === null) {
+            const savedStateString = await storage.get(STORAGE_KEY.NAVIGATION)
+
+            const state = savedStateString ?? undefined
+
+            if (state !== undefined) {
+              setInitialState(state)
+            }
+          }
+        } catch (e) {
+          console.log(e)
+        } finally {
+          setHydrated(true)
+        }
+      }
+
+      if (!hydrated) {
+        restoreState()
+      }
+    }, [hydrated])
+
+    return {
+      hydrated,
+      initialState,
+      navigationRef,
+      onChangeState,
+      linking
+    }
+  }

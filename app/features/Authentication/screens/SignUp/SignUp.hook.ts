@@ -15,14 +15,19 @@ type SignUpNavigationPropType = CompositeNavigationProp<
 
 type SignUpRouteParamsType = RouteProp<AuthenticationStackParamList, 'signup'>
 
-export const useSignUpScreen = () => {
+interface IUseSignUpScreen {
+  handleNavigateForAppHome: () => void
+  id?: string
+}
+
+export const useSignUpScreen = (): IUseSignUpScreen => {
   const { navigate } = useNavigation<SignUpNavigationPropType>()
 
   const { params } = useRoute<SignUpRouteParamsType>()
 
   const id = params?.id || ''
 
-  const handleNavigateForAppHome = () => {
+  const handleNavigateForAppHome = (): void => {
     navigate('app')
   }
 

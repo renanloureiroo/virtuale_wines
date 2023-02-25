@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
@@ -16,7 +16,7 @@ export type AppStackParamList = {
 
 const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>()
 
-export const AppStackNavigation = () => {
+export const AppStackNavigation: FC = () => {
   const { hydrated, initialState, navigationRef, onChangeState, linking } =
     useAppStackNavigationScreen()
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { defaultOptions } from '../../../shared/config/navigation/header'
@@ -15,7 +15,7 @@ export type AuthenticationStackParamList = {
 const { Navigator, Screen } =
   createNativeStackNavigator<AuthenticationStackParamList>()
 
-export const AuthenticationStack = () => {
+export const AuthenticationStack: FC = () => {
   return (
     <Navigator
       screenOptions={defaultOptions}

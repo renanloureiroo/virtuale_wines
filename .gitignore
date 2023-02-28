@@ -50,6 +50,10 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
+# Firebase
+/ios/GoogleService-Info.plist
+google-services.json
+
 # Expo
 .expo/
 web-build/

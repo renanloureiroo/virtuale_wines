@@ -1,10 +1,13 @@
+import {
+  Control,
+  DeepPartial,
+  FieldErrors,
+  useForm as useReactHookForm,
+  UseFormProps as UseReactHookFormProps,
+  UseFormTrigger
+} from 'react-hook-form'
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import {
-  DeepPartial,
-  useForm as useReactHookForm,
-  UseFormProps as UseReactHookFormProps
-} from 'react-hook-form'
 import { ObjectSchema } from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -18,11 +21,18 @@ type FormData = Record<string, any>
 // }
 
 interface UseFormProps<T> {
-  // onSubmit: (data: T) => void
   options?: UseReactHookFormProps<T>
   defaultValues?: DeepPartial<T>
   validationSchema?: ObjectSchema<T>
   formatters?: Record<string, (value: any) => any>
+}
+
+interface IUseForm<T> {
+  control: Control<T, any>
+  handleSubmit: (any) => Promise<void>
+  errors: FieldErrors<T>
+  validate: UseFormTrigger<T>
+  formatValue: (name: string, value: any) => any
 }
 
 export const useForm = <T extends FormData>(
@@ -33,7 +43,7 @@ export const useForm = <T extends FormData>(
     defaultValues = {} as DeepPartial<T>,
     formatters
   }: UseFormProps<T>
-) => {
+): IUseForm<T> => {
   const {
     control,
     handleSubmit,
@@ -54,7 +64,7 @@ export const useForm = <T extends FormData>(
     control,
     handleSubmit: handleSubmit(onSubmit),
     errors,
-    trigger,
+    validate: trigger,
     formatValue
   }
 }

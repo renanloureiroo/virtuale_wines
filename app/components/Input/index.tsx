@@ -14,7 +14,7 @@ import { TextInput, TextInputProps } from 'react-native'
 
 type FormType = {
   control: Control<any, any>
-  trigger: UseFormTrigger<any>
+  validate: UseFormTrigger<any>
   errors: FieldErrors<any>
   formatValue: (name: string, value: any) => any
   validateOnChange?: boolean
@@ -41,7 +41,7 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (
           onChangeText={(text): void => {
             onChange(form.formatValue(name, text))
             if (validateOnChange) {
-              form.trigger(name)
+              form.validate(name)
             }
           }}
           onBlur={onBlur}

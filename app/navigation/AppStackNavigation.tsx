@@ -1,16 +1,22 @@
 import React, { FC } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import {
+  NavigationContainer,
+  NavigatorScreenParams
+} from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { defaultOptions } from '../shared/config/navigation/header'
 
 import { useAppStackNavigationScreen } from './AppStackNavigation.hook'
-import { AuthenticationStack } from '../features/Authentication/navigation/AuthenticationStack'
+import {
+  AuthenticationStack,
+  AuthenticationStackParamList
+} from '../features/Authentication/navigation/AuthenticationStack'
 import { Home } from '../features/Home/screens/Home'
 import { Text } from 'react-native'
 
 export type AppStackParamList = {
-  authentication: undefined
+  authentication: NavigatorScreenParams<AuthenticationStackParamList>
   app: undefined
 }
 

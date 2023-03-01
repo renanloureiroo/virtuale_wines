@@ -11,6 +11,7 @@ import {
   UseFormTrigger
 } from 'react-hook-form'
 import { TextInput, TextInputProps } from 'react-native'
+import { Box } from '../Box'
 
 type FormType = {
   control: Control<any, any>
@@ -24,34 +25,35 @@ interface InputProps extends TextInputProps {
   form: FormType
   name: string
   validateOnChange?: boolean
+  leftIcon?: ReactElement
 }
 
 const Base: ForwardRefRenderFunction<TextInput, InputProps> = (
-  { form, name, validateOnChange = false, ...props },
+  { form, name, validateOnChange = false, leftIcon, ...props },
   ref
 ) => {
-  const error = form.errors[name] ?? false
+  // const error = form.errors[name] ?? false
   return (
     <Controller
       control={form.control}
       name={name}
       render={({ field: { onChange, onBlur, value } }): ReactElement => (
-        <TextInput
-          ref={ref}
-          onChangeText={(text): void => {
-            onChange(form.formatValue(name, text))
-            if (validateOnChange) {
-              form.validate(name)
-            }
-          }}
-          onBlur={onBlur}
-          value={value}
-          className={clsx(
-            'bg-white border border-gray-500 rounded-none mb-2',
-            !!error && 'border-red-500'
-          )}
-          {...props}
-        />
+        <Box className="h-14 rounded-full bg-white px-4 w-full flex flex-row items-center">
+          {leftIcon}
+          <TextInput
+            ref={ref}
+            onChangeText={(text): void => {
+              onChange(form.formatValue(name, text))
+              if (validateOnChange) {
+                form.validate(name)
+              }
+            }}
+            onBlur={onBlur}
+            value={value}
+            className={clsx('flex-1 bg-transparent')}
+            {...props}
+          />
+        </Box>
       )}
     />
   )

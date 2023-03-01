@@ -8,6 +8,9 @@ import { formatToBRL } from '../../../../shared/utils/formatters/formatToBRL'
 import { Input } from '../../../../components/Input'
 import { Button } from '../../../../components/Button'
 
+import { User } from 'phosphor-react-native'
+import { Icon } from '../../../../components/Icon'
+
 const schema = yup.object().shape({
   email: yup.string().email().required(),
   price: yup.string().required()
@@ -32,10 +35,13 @@ export const SignIn: FC<ReactElement> = () => {
   })
 
   return (
-    <Box screen>
+    <Box
+      screen
+      className="bg-brand-background px-4">
       <Input
         form={props}
         name="email"
+        leftIcon={<Icon Icon={User} />}
       />
       <Input
         name="price"

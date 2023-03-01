@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { SafeAreaViewProps } from 'react-native-safe-area-context'
 import React, { ComponentType, ReactElement, ReactNode } from 'react'
 import {
@@ -62,11 +63,8 @@ export function Box<T = false>({
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Wrapper
-          // eslint-disable-next-line react-native/no-inline-styles
           style={{
-            flex: 1,
-            paddingTop: !fullScreen ? statusBarHeight + 16 : 0,
-            paddingBottom: !fullScreen ? bottomSpaceHeight : 0
+            flex: 1
           }}>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -79,6 +77,10 @@ export function Box<T = false>({
 
             {scroll ? (
               <ScrollView
+                style={{
+                  paddingTop: !fullScreen ? statusBarHeight + 16 : 0,
+                  paddingBottom: !fullScreen ? bottomSpaceHeight : 0
+                }}
                 className={clsx('flex-1', className)}
                 keyboardShouldPersistTaps="handled"
                 {...props}>
@@ -86,6 +88,10 @@ export function Box<T = false>({
               </ScrollView>
             ) : (
               <View
+                style={{
+                  paddingTop: !fullScreen ? statusBarHeight + 16 : 0,
+                  paddingBottom: !fullScreen ? bottomSpaceHeight : 0
+                }}
                 className={clsx('flex-1', className)}
                 {...props}>
                 {children}

@@ -32,5 +32,7 @@ export const AuthenticationFirebaseService: IAuthenticationService = {
     await signInWithGoogle()
   },
 
-  signOut: () => {}
+  signOut: () => {
+    console.log('signOut')
+  }
 }

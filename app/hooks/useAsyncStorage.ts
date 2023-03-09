@@ -8,7 +8,7 @@ type useLocalStorageType<T> = [
   hydrated: boolean
 ]
 
-export const useLocalStorage = <T = false>(
+export const useLocalStorage = <T = any>(
   key: STORAGE_KEY,
   initialValue?: T
 ): useLocalStorageType<T> => {
@@ -18,8 +18,8 @@ export const useLocalStorage = <T = false>(
   useEffect(() => {
     const getValue = async (): Promise<void> => {
       return await storage
-        .get(key)
-        .then((data) => setState(JSON.parse(data)))
+        .get<T>(key)
+        .then((data) => setState(JSON.parse(data as string)))
         .finally(() => setHydrated(false))
     }
 

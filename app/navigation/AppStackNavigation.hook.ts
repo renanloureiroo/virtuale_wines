@@ -60,7 +60,9 @@ export const useAppStackNavigationScreen =
           console.log(initialUrl)
 
           if (Platform.OS !== 'web' && initialUrl === null) {
-            const savedStateString = await storage.get(STORAGE_KEY.NAVIGATION)
+            const savedStateString = await storage.get<any>(
+              STORAGE_KEY.NAVIGATION
+            )
 
             const state = savedStateString ?? undefined
 

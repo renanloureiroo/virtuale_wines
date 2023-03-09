@@ -12,6 +12,7 @@ import {
 } from 'react-hook-form'
 import { TextInput, TextInputProps } from 'react-native'
 import { Box } from '../Box'
+import { Text } from '../Text'
 
 type FormType = {
   control: Control<any, any>
@@ -32,28 +33,34 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (
   { form, name, validateOnChange = false, leftIcon, ...props },
   ref
 ) => {
-  // const error = form.errors[name] ?? false
+  const error = form.errors[name] ?? false
+  const messageError = (form.errors[name]?.message as string) ?? ''
+
   return (
     <Controller
       control={form.control}
       name={name}
       render={({ field: { onChange, onBlur, value } }): ReactElement => (
-        <Box className="h-14 rounded-full bg-white px-4 w-full flex flex-row items-center">
-          {leftIcon}
-          <TextInput
-            ref={ref}
-            onChangeText={(text): void => {
-              onChange(form.formatValue(name, text))
-              if (validateOnChange) {
-                form.validate(name)
-              }
-            }}
-            onBlur={onBlur}
-            value={value}
-            className={clsx('flex-1 bg-transparent')}
-            {...props}
-          />
-        </Box>
+        <>
+          <Box className="h-14 rounded-full bg-white px-4 w-full flex flex-row items-center">
+            {leftIcon}
+            <TextInput
+              ref={ref}
+              onChangeText={(text): void => {
+                onChange(form.formatValue(name, text))
+                if (validateOnChange) {
+                  form.validate(name)
+                }
+              }}
+              onBlur={onBlur}
+              value={value}
+              className={clsx('flex-1 bg-transparent')}
+              {...props}
+            />
+          </Box>
+
+          {error && messageError && <Text>{messageError}</Text>}
+        </>
       )}
     />
   )

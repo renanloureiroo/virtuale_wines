@@ -11,6 +11,7 @@ import { Button } from '../../../../components/Button'
 
 import { User } from 'phosphor-react-native'
 import { Icon } from '../../../../components/Icon'
+import { useSignInScreen } from './SignIn.hook'
 
 const schema = yup.object().shape({
   email: yup.string().email('E-mail inválido!').required('Campo obrigatório!'),
@@ -26,7 +27,7 @@ type FormDataType = {
 }
 
 export const SignIn: FC<ReactElement> = () => {
-  // const { handleLogin } = useSignInScreen()
+  const { handleLogin } = useSignInScreen()
 
   const onSubmit = (data: FormDataType): void => console.log(data)
 
@@ -78,7 +79,10 @@ export const SignIn: FC<ReactElement> = () => {
       <Box className="w-full h-[1px] bg-gray-300 my-6" />
 
       <Box className="flex-row w-full items-center justify-center">
-        <GoogleSigninButton size={GoogleSigninButton.Size.Icon} />
+        <GoogleSigninButton
+          size={GoogleSigninButton.Size.Icon}
+          onPress={handleLogin}
+        />
       </Box>
     </Box>
   )

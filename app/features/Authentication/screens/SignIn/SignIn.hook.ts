@@ -1,7 +1,7 @@
-import { AuthenticationFirebaseService } from './../../../../service/authentication/firebase'
 import { AuthenticationStackParamList } from './../../navigation/AuthenticationStack'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
+import { useAuth } from '../../../../hooks/useAuth'
 
 type SignInType = NativeStackNavigationProp<
   AuthenticationStackParamList,
@@ -15,13 +15,14 @@ interface IUseSignInScreen {
 
 export const useSignInScreen = (): IUseSignInScreen => {
   const { push } = useNavigation<SignInType>()
-
-  const handleLogin = (): Promise<void> => {
-    return AuthenticationFirebaseService.login()
-  }
+  const { signIn } = useAuth()
 
   const handleNavigateForSignUp = (): void => {
     push('signup')
+  }
+
+  const handleLogin = async (): Promise<void> => {
+    return signIn()
   }
 
   return {

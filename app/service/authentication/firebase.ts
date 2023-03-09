@@ -2,17 +2,18 @@ import { IAuthenticationService } from './index'
 
 import {
   GoogleSignin,
-  statusCodes
+  statusCodes,
+  User
 } from '@react-native-google-signin/google-signin'
 
-const signInWithGoogle = async (): Promise<void> => {
+const signInWithGoogle = async (): Promise<User> => {
   try {
     const res = await GoogleSignin.hasPlayServices({
       showPlayServicesUpdateDialog: true
     })
     console.log(res)
     const userInfo = await GoogleSignin.signIn()
-    console.log(userInfo)
+    return userInfo
   } catch (error) {
     console.log(error)
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -29,7 +30,7 @@ const signInWithGoogle = async (): Promise<void> => {
 
 export const AuthenticationFirebaseService: IAuthenticationService = {
   login: async () => {
-    await signInWithGoogle()
+    return await signInWithGoogle()
   },
 
   signOut: () => {

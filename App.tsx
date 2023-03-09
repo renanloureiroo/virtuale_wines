@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { AppStackNavigation } from './app/navigation/AppStackNavigation'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { MainProvider } from './app/contexts/provider'
 
 export default function App(): ReactElement {
   GoogleSignin.configure({
@@ -13,7 +14,9 @@ export default function App(): ReactElement {
   return (
     <GestureHandlerRootView className="flex-1">
       <StatusBar style="auto" />
-      <AppStackNavigation />
+      <MainProvider>
+        <AppStackNavigation />
+      </MainProvider>
     </GestureHandlerRootView>
   )
 }

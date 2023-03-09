@@ -20,7 +20,7 @@ import { useBoxComponent } from './box.hook'
 export type WrapperType = ComponentType<ViewProps | SafeAreaViewProps>
 
 type BoxBaseProps<T> = {
-  children: ReactNode
+  children?: ReactNode
 
   /** Utiliza uma `ScrollView`. */
   scroll?: T
@@ -67,7 +67,7 @@ export function Box<T = false>({
             flex: 1
           }}>
           <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             className={'flex-1'}>
             <StatusBar
               backgroundColor="transparent"

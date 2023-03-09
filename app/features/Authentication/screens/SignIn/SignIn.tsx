@@ -1,4 +1,5 @@
 import React, { FC, ReactElement } from 'react'
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 
 import { Box } from '../../../../components/Box'
 import { useForm } from '../../../../service/Form/FormService'
@@ -12,13 +13,16 @@ import { User } from 'phosphor-react-native'
 import { Icon } from '../../../../components/Icon'
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  price: yup.string().required()
+  email: yup.string().email('E-mail inválido!').required('Campo obrigatório!'),
+  password: yup
+    .string()
+    .min(8, 'Mínimo de 8 caracteres!')
+    .required('Campo obrigatório!')
 })
 
 type FormDataType = {
   email: string
-  price: string
+  password: string
 }
 
 export const SignIn: FC<ReactElement> = () => {
@@ -31,17 +35,20 @@ export const SignIn: FC<ReactElement> = () => {
     formatters: {
       price: formatToBRL
     },
-    options: {}
+    options: {
+      delayError: 500
+    }
   })
 
   return (
     <Box
       screen
-      className="bg-brand-background px-4">
+      className="bg-brand-background px-4 justify-end">
       <Input
         form={props}
         name="email"
         autoCapitalize="none"
+        placeholder="E-mail"
         autoCorrect={false}
         leftIcon={
           <Icon
@@ -50,21 +57,29 @@ export const SignIn: FC<ReactElement> = () => {
             size={24}
           />
         }
+        className="mb-4"
       />
       <Input
-        name="price"
+        name="password"
         form={props}
         autoCapitalize="none"
         autoCorrect={false}
         variant="password"
-        placeholder={'R$ 00,00'}
+        placeholder={'Senha'}
         keyboardType={'numeric'}
+        className="mb-8"
       />
 
       <Button
         onPress={handleSubmit}
         title="Entrar"
       />
+
+      <Box className="w-full h-[1px] bg-gray-300 my-6" />
+
+      <Box className="flex-row w-full items-center justify-center">
+        <GoogleSigninButton size={GoogleSigninButton.Size.Icon} />
+      </Box>
     </Box>
   )
 }

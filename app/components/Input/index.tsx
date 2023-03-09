@@ -1,5 +1,3 @@
-import clsx from 'clsx'
-import { Eye, EyeClosed } from 'phosphor-react-native'
 import React, {
   forwardRef,
   ForwardRefRenderFunction,
@@ -12,10 +10,15 @@ import {
   FieldErrors,
   UseFormTrigger
 } from 'react-hook-form'
+import clsx from 'clsx'
+import { Eye, EyeClosed } from 'phosphor-react-native'
 import { Pressable, TextInput, TextInputProps } from 'react-native'
-import { Box } from '../Box'
+
 import { Icon } from '../Icon'
-import { Text } from '../Text'
+
+import { Root } from './Root'
+import { Box } from '../Box'
+import { ErrorMessage } from './ErrorMessage'
 
 type FormType = {
   control: Control<any, any>
@@ -43,6 +46,7 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (
     onBlurAction,
     onSubmitEditing,
     leftIcon,
+    className,
     ...props
   },
   ref
@@ -63,12 +67,58 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (
         name={name}
         render={({ field: { onChange, onBlur, value } }): ReactElement => (
           <>
-            <Box className="h-14 rounded-full bg-white px-4 w-full flex flex-row items-center">
+            <Box className={className}>
+              <Root>
+                {leftIcon}
+                <TextInput
+                  ref={ref}
+                  textContentType={'password'}
+                  secureTextEntry={!isVisible}
+                  onChangeText={(text): void => {
+                    onChange(form.formatValue(name, text))
+                    if (validateOnChange) {
+                      form.validate(name)
+                    }
+                  }}
+                  onBlur={(): void => {
+                    onBlur()
+
+                    onBlurAction && onBlurAction()
+                  }}
+                  onSubmitEditing={onSubmitEditing}
+                  value={value}
+                  className={clsx('flex-1 bg-transparent px-2')}
+                  {...props}
+                />
+                <Pressable onPress={handleToggleVisibility}>
+                  <Icon
+                    Icon={isVisible ? Eye : EyeClosed}
+                    color="gray"
+                  />
+                </Pressable>
+              </Root>
+              <ErrorMessage
+                error={error as boolean}
+                messageError={messageError}
+              />
+            </Box>
+          </>
+        )}
+      />
+    )
+  }
+
+  return (
+    <Controller
+      control={form.control}
+      name={name}
+      render={({ field: { onChange, onBlur, value } }): ReactElement => (
+        <>
+          <Box className={className}>
+            <Root>
               {leftIcon}
               <TextInput
                 ref={ref}
-                textContentType={'password'}
-                secureTextEntry={!isVisible}
                 onChangeText={(text): void => {
                   onChange(form.formatValue(name, text))
                   if (validateOnChange) {
@@ -85,47 +135,12 @@ const Base: ForwardRefRenderFunction<TextInput, InputProps> = (
                 className={clsx('flex-1 bg-transparent px-2')}
                 {...props}
               />
-              <Pressable onPress={handleToggleVisibility}>
-                <Icon Icon={isVisible ? Eye : EyeClosed} />
-              </Pressable>
-            </Box>
-
-            {error && messageError && <Text>{messageError}</Text>}
-          </>
-        )}
-      />
-    )
-  }
-
-  return (
-    <Controller
-      control={form.control}
-      name={name}
-      render={({ field: { onChange, onBlur, value } }): ReactElement => (
-        <>
-          <Box className="h-14 rounded-full bg-white px-4 w-full flex flex-row items-center">
-            {leftIcon}
-            <TextInput
-              ref={ref}
-              onChangeText={(text): void => {
-                onChange(form.formatValue(name, text))
-                if (validateOnChange) {
-                  form.validate(name)
-                }
-              }}
-              onBlur={(): void => {
-                onBlur()
-
-                onBlurAction && onBlurAction()
-              }}
-              onSubmitEditing={onSubmitEditing}
-              value={value}
-              className={clsx('flex-1 bg-transparent px-2')}
-              {...props}
+            </Root>
+            <ErrorMessage
+              error={error as boolean}
+              messageError={messageError}
             />
           </Box>
-
-          {error && messageError && <Text>{messageError}</Text>}
         </>
       )}
     />

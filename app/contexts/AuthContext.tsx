@@ -1,5 +1,16 @@
-import React, { createContext, useState, ReactNode, FC } from 'react'
+import React, {
+  createContext,
+  ReactNode,
+  FC,
+  useEffect,
+  useCallback
+} from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import * as SplashScreen from 'expo-splash-screen'
+
+import { useLocalStorage } from '../hooks/useAsyncStorage'
 import { AuthenticationFirebaseService } from '../service/authentication/firebase'
+import { STORAGE_KEY } from '../shared/constants/storage'
 
 type User = {
   email: string
@@ -23,7 +34,10 @@ interface AuthProviderProps {
 export const AuthContext = createContext<AuthContextType>(null)
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null)
+  const [state, setState, hydrated] = useLocalStorage(
+    STORAGE_KEY.USER,
+    {} as User
+  )
 
   const signIn = async (credentials?: Credentials): Promise<void> => {
     if (credentials) {
@@ -32,7 +46,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     try {
       const { user } = await AuthenticationFirebaseService.login()
 
-      setUser({
+      setState({
         name: user.givenName,
         email: user.email,
         avatar: user.photo
@@ -41,9 +55,29 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    console.log('state', state)
+    console.log('hydrated', hydrated)
+  }, [state, hydrated])
+
+  const onLayoutRootView = useCallback(async () => {
+    if (!hydrated) {
+      await SplashScreen.hideAsync()
+    }
+  }, [hydrated])
+
+  if (hydrated) {
+    return null
+  }
+
   return (
-    <AuthContext.Provider value={{ user, signIn }}>
-      {children}
-    </AuthContext.Provider>
+    <GestureHandlerRootView
+      className="flex-1"
+      onLayout={onLayoutRootView}>
+      <AuthContext.Provider value={{ user: state, signIn }}>
+        {children}
+      </AuthContext.Provider>
+    </GestureHandlerRootView>
   )
 }

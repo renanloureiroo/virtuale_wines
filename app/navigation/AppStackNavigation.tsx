@@ -14,17 +14,21 @@ import {
 } from '../features/Authentication/navigation/AuthenticationStack'
 import { Home } from '../features/Home/screens/Home'
 import { Text } from 'react-native'
+import { useAuth } from '../hooks/useAuth'
 
 export type AppStackParamList = {
   authentication: NavigatorScreenParams<AuthenticationStackParamList>
   app: undefined
 }
 
-const { Navigator, Screen } = createNativeStackNavigator<AppStackParamList>()
+const { Navigator, Screen, Group } =
+  createNativeStackNavigator<AppStackParamList>()
 
 export const AppStackNavigation: FC = () => {
   const { hydrated, initialState, navigationRef, onChangeState, linking } =
     useAppStackNavigationScreen()
+
+  const { user } = useAuth()
 
   if (!hydrated) {
     return null
@@ -41,15 +45,21 @@ export const AppStackNavigation: FC = () => {
       linking={linking}
       fallback={<Text>Loading...</Text>}>
       <Navigator screenOptions={defaultOptions}>
-        <Screen
-          component={AuthenticationStack}
-          name={'authentication'}
-        />
-
-        <Screen
-          component={Home}
-          name={'app'}
-        />
+        {!user ? (
+          <Group>
+            <Screen
+              component={AuthenticationStack}
+              name={'authentication'}
+            />
+          </Group>
+        ) : (
+          <Group>
+            <Screen
+              component={Home}
+              name={'app'}
+            />
+          </Group>
+        )}
       </Navigator>
     </NavigationContainer>
   )

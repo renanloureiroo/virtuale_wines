@@ -41,11 +41,22 @@ export const SignIn: FC<ReactElement> = () => {
       <Input
         form={props}
         name="email"
-        leftIcon={<Icon Icon={User} />}
+        autoCapitalize="none"
+        autoCorrect={false}
+        leftIcon={
+          <Icon
+            Icon={User}
+            color="gray"
+            size={24}
+          />
+        }
       />
       <Input
         name="price"
         form={props}
+        autoCapitalize="none"
+        autoCorrect={false}
+        variant="password"
         placeholder={'R$ 00,00'}
         keyboardType={'numeric'}
       />

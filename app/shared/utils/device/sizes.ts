@@ -5,7 +5,14 @@ interface IDeviceSizes {
   getBottomSpace: () => number
 }
 
-export const sizes: IDeviceSizes = {
-  getStatusBarHeight: () => iphoneHelper.getStatusBarHeight(),
-  getBottomSpace: () => iphoneHelper.getBottomSpace()
+class Device implements IDeviceSizes {
+  getStatusBarHeight(): number {
+    return iphoneHelper.getStatusBarHeight()
+  }
+
+  getBottomSpace(): number {
+    return iphoneHelper.getBottomSpace()
+  }
 }
+
+export const device = new Device()
